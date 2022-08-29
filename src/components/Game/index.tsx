@@ -52,7 +52,7 @@ const index = () => {
                     </div>
                 </>
             ) : (
-                <Board />
+                <Board gameType={selectedGameType} selectedPiece={selectedPiece} />
             )}
         </div>
     );
