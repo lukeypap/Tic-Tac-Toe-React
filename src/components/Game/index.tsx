@@ -6,10 +6,10 @@ const index = () => {
     const [selectedGameType, setSelectedGameType] = useState("");
 
     return (
-        <div>
+        <div className="sm:w-screen lg:w-[30vw] md:w-[50vw]">
             {selectedGameType === "" ? (
                 <>
-                    <div className="w-[25vw] shadow-[0px_5px_0px_0px] shadow-black rounded-md bg-slate-800 flex flex-col text-center p-6">
+                    <div className="shadow-[0px_5px_0px_0px] shadow-black rounded-md bg-slate-800 flex flex-col text-center p-6">
                         <p className="mb-4">Pick your piece</p>
                         <div className="flex flex-row justify-center bg-slate-900 rounded-lg p-2 font-extrabold">
                             <button
@@ -34,7 +34,7 @@ const index = () => {
                             </button>
                         </div>
                     </div>
-                    <div className="w-[25vw] flex flex-col">
+                    <div className="flex flex-col">
                         <button
                             className=" bg-yellow-300 my-5 rounded-md p-3 text-slate-800 shadow-md"
                             onClick={() => {
