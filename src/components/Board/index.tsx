@@ -3,7 +3,7 @@ import Square from "../Square";
 
 const index = () => {
     const [board, setBoard] = useState([
-        ["-", "-", "-"],
+        ["-", "X", "-"],
         ["-", "-", "-"],
         ["-", "-", "-"],
     ]);
