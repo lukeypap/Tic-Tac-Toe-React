@@ -25,7 +25,7 @@ const index = ({
     const [currentPlayer, setCurrentPlayer] = useState(startingPlayer);
     const [aiPiece, setAiPiece] = useState(selectedPiece === PIECE.O ? PIECE.X : PIECE.O);
     const [gameOver, setGameOver] = useState(false);
-    const [checkingMove, setCheckingMove] = useState(false);
+    const [checkingMove, setCheckingMove] = useState(true);
     const [resetGame, setResetGame] = useState(false);
 
     const handlePlacePiece = (row: number, col: number) => {
@@ -41,6 +41,7 @@ const index = ({
                         : boardRow
                 )
             );
+            setCurrentPlayer(currentPlayer === PIECE.X ? PIECE.O : PIECE.X);
         }
     };
 
@@ -66,7 +67,6 @@ const index = ({
             setGameOver(true);
             setEndScreenOpen({ open: true, endState: isWinner ? isWinner : "Draw" });
         } else {
-            setCurrentPlayer((current) => (current === PIECE.X ? PIECE.O : PIECE.X));
             setCheckingMove(false);
         }
     }, [board]);
@@ -74,6 +74,9 @@ const index = ({
     useEffect(() => {
         if (!checkingMove && gameType === "AI" && !gameOver && currentPlayer === aiPiece) {
             if (difficulty === DIFFICULTY.EASY) {
+                console.log(
+                    `SETTING AI PIECE CK:${checkingMove}, GO:${gameOver}, CP:${currentPlayer}, ${aiPiece}`
+                );
                 const { row, col } = easyAi(board);
                 handlePlacePiece(row, col);
             } else if (difficulty === DIFFICULTY.HARD) {
