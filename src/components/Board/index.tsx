@@ -4,20 +4,29 @@ import { hardAi } from "../../ai/hard";
 import Square from "../Square";
 import { checkDraw, checkWinner, DIFFICULTY, PIECE } from "./boardLogic";
 import Menu from "../Menu";
+import Modal from "../Modal";
 
 interface props {
     gameType: "AI" | "HUMAN";
     selectedPiece: PIECE;
     startingPlayer: PIECE;
     difficulty: DIFFICULTY | null;
+    setEndScreenOpen: any;
 }
 
-const index = ({ gameType, selectedPiece, startingPlayer, difficulty }: props) => {
+const index = ({
+    gameType,
+    selectedPiece,
+    startingPlayer,
+    difficulty,
+    setEndScreenOpen,
+}: props) => {
     const [board, setBoard] = useState(Array(3).fill(Array(3).fill(PIECE.EMPTY)));
     const [currentPlayer, setCurrentPlayer] = useState(startingPlayer);
     const [aiPiece, setAiPiece] = useState(selectedPiece === PIECE.O ? PIECE.X : PIECE.O);
     const [gameOver, setGameOver] = useState(false);
     const [checkingMove, setCheckingMove] = useState(false);
+    const [resetGame, setResetGame] = useState(false);
 
     const handlePlacePiece = (row: number, col: number) => {
         let mark = board[row][col];
@@ -36,6 +45,15 @@ const index = ({ gameType, selectedPiece, startingPlayer, difficulty }: props) =
     };
 
     useEffect(() => {
+        if (resetGame) {
+            setBoard(Array(3).fill(Array(3).fill(PIECE.EMPTY)));
+            setCurrentPlayer(startingPlayer);
+            setGameOver(false);
+            setResetGame(false);
+        }
+    }, [resetGame]);
+
+    useEffect(() => {
         const isWinner = checkWinner(board);
         const isDraw = checkDraw(board);
 
@@ -46,6 +64,7 @@ const index = ({ gameType, selectedPiece, startingPlayer, difficulty }: props) =
                 console.log("Draw");
             }
             setGameOver(true);
+            setEndScreenOpen({ open: true, endState: isWinner ? isWinner : "Draw" });
         } else {
             setCurrentPlayer((current) => (current === PIECE.X ? PIECE.O : PIECE.X));
             setCheckingMove(false);
@@ -70,15 +89,12 @@ const index = ({ gameType, selectedPiece, startingPlayer, difficulty }: props) =
     return (
         <div className="text-center">
             <div>
-                <Menu currentPlayer={currentPlayer} />
+                <Menu
+                    currentPlayer={currentPlayer}
+                    resetGame={resetGame}
+                    setResetGame={setResetGame}
+                />
             </div>
-            {gameOver ? (
-                <div className="absolute w-screen h-1/2 flex justify-center items-center">
-                    <p>Winner is: {currentPlayer}</p>
-                </div>
-            ) : (
-                ""
-            )}
 
             {board.map((row, rowId) => (
                 <div className="flex justify-center" key={rowId}>

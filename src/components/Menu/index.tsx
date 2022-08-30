@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { PIECE } from "../Board/boardLogic";
 import { VscDebugRestart } from "react-icons/vsc";
 
 interface props {
     currentPlayer: PIECE;
+    resetGame: boolean;
+    setResetGame: any;
 }
 
-const index = ({ currentPlayer }: props) => {
+const index = ({ currentPlayer, resetGame, setResetGame }: props) => {
     return (
         <div className="flex justify-center items-center mb-4">
             <div className="font-logo flex items-center justify-start font-bold text-4xl w-full ml-5">
@@ -28,13 +30,16 @@ const index = ({ currentPlayer }: props) => {
                     >
                         {currentPlayer}
                     </p>
-                    TURN
+                    turn
                 </div>
             </div>
             <div className="w-full flex justify-end mr-5">
-                <div className="bg-[#1F3540] h-8 w-8 md:w-10 md:h-10 lg:w-12 lg:h-12 m-2 rounded-md shadow-[0px_4px_0px_0px] shadow-[#0F202A] flex justify-center items-center text-xl">
+                <button
+                    className="bg-lightTile h-8 w-8 md:w-10 md:h-10 lg:w-12 lg:h-12 m-2 rounded-md shadow-[0px_4px_0px_0px] shadow-[#4d575c] flex justify-center items-center text-2xl text-[#192A32] hover:bg-[#bcd5e0]"
+                    onClick={() => setResetGame(true)}
+                >
                     <VscDebugRestart />
-                </div>
+                </button>
             </div>
         </div>
     );
