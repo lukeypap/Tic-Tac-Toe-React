@@ -12,6 +12,9 @@ module.exports = {
         "secondary": "#1F3540",
         "lightTile": "#A8BEC9",
       },
+      fontFamily: {
+        'logo': "'Oleo Script Swash Caps'"
+      }
     },
   },
   plugins: [],

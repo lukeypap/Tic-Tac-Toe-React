@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Board from "../Board";
 import { DIFFICULTY } from "../Board/boardLogic";
 import DifficultyScreen from "../DifficultyScreen";
+import Header from "../Header";
 
 enum PIECE {
     X = "X",
@@ -19,6 +20,7 @@ const index = () => {
         <div className="sm:w-screen lg:w-[30vw] md:w-[50vw]">
             {!gameStarted ? (
                 <>
+                    <Header />
                     <div className="shadow-[0px_5px_0px_0px] shadow-shadowColor rounded-md bg-secondary flex flex-col text-center p-6">
                         <p className="mb-4">Pick your piece</p>
                         <div className="flex flex-row justify-center bg-primary rounded-lg p-2 font-extrabold">

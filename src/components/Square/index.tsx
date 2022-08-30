@@ -19,7 +19,7 @@ const index = ({ row, col, mark, handlePlacePiece }: props) => {
                         mark === "X"
                             ? "bg-gradient-to-r from-violet-500 to-fuchsia-500"
                             : "bg-gradient-to-r from-sky-500 to-indigo-500"
-                    } bg-clip-text text-transparent`}
+                    } bg-clip-text text-transparent font-logo`}
                 >
                     {mark}
                 </p>

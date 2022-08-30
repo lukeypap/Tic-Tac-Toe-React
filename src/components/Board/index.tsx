@@ -3,6 +3,7 @@ import { easyAi } from "../../ai/easy";
 import { hardAi } from "../../ai/hard";
 import Square from "../Square";
 import { checkDraw, checkWinner, DIFFICULTY, PIECE } from "./boardLogic";
+import Menu from "../Menu";
 
 interface props {
     gameType: "AI" | "HUMAN";
@@ -69,7 +70,7 @@ const index = ({ gameType, selectedPiece, startingPlayer, difficulty }: props) =
     return (
         <div className="text-center">
             <div>
-                <h1>MENU</h1>
+                <Menu currentPlayer={currentPlayer} />
             </div>
             {gameOver ? (
                 <div className="absolute w-screen h-1/2 flex justify-center items-center">
