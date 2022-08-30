@@ -6,7 +6,16 @@ export function hardAi(board: PIECE[][], aiPiece: PIECE) {
 }
 
 function analyzeBoard(board: PIECE[][], aiPiece: PIECE, oppPiece: PIECE) {
-    let { row, col } = checkForWin(board, aiPiece);
+    let row;
+    let col;
+    ({ row, col } = checkForWin(board, aiPiece));
+    if (row === undefined || col === undefined) {
+        ({ row, col } = checkForWin(board, oppPiece));
+    }
+    if (row === undefined || col === undefined) {
+        row = getRandomMove();
+        col = getRandomMove();
+    }
     console.log(`${board}`);
     while (board[row][col] !== PIECE.EMPTY) {
         row = getRandomMove();
@@ -16,7 +25,7 @@ function analyzeBoard(board: PIECE[][], aiPiece: PIECE, oppPiece: PIECE) {
     return { row, col };
 }
 
-function checkForWin(board: PIECE[][], aiPiece: PIECE): { row: number; col: number } {
+function checkForWin(board: PIECE[][], aiPiece: PIECE) {
     let row;
     let col;
     let count = 0;
@@ -122,12 +131,7 @@ function checkForWin(board: PIECE[][], aiPiece: PIECE): { row: number; col: numb
             col = count + 2;
         }
     }
-    if (row === undefined || col === undefined) {
-        row = getRandomMove();
-        col = getRandomMove();
-    }
-    console.log(`RETURNING ROW: ${row}, COL: ${col}`);
-    return { row, col };
+    return { row: row, col: col };
 }
 
 function getRandomMove() {
