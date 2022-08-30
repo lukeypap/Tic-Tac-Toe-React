@@ -1,49 +1,70 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { easyAi } from "../../ai/easy";
+import { hardAi } from "../../ai/hard";
 import Square from "../Square";
-import { checkDraw, checkWinner } from "./boardLogic";
+import { checkDraw, checkWinner, DIFFICULTY, PIECE } from "./boardLogic";
 
 interface props {
-    gameType: string;
-    selectedPiece: string;
-    startingPlayer: string;
+    gameType: "AI" | "HUMAN";
+    selectedPiece: PIECE;
+    startingPlayer: PIECE;
+    difficulty: DIFFICULTY | null;
 }
 
-const index = ({ gameType, selectedPiece, startingPlayer }: props) => {
-    const [board, setBoard] = useState([
-        ["-", "-", "-"],
-        ["-", "-", "-"],
-        ["-", "-", "-"],
-    ]);
+const index = ({ gameType, selectedPiece, startingPlayer, difficulty }: props) => {
+    const [board, setBoard] = useState(Array(3).fill(Array(3).fill(PIECE.EMPTY)));
     const [currentPlayer, setCurrentPlayer] = useState(startingPlayer);
-    const [aiPiece, setAiPiece] = useState(selectedPiece === "O" ? "X" : "O");
+    const [aiPiece, setAiPiece] = useState(selectedPiece === PIECE.O ? PIECE.X : PIECE.O);
     const [gameOver, setGameOver] = useState(false);
+    const [checkingMove, setCheckingMove] = useState(false);
 
     const handlePlacePiece = (row: number, col: number) => {
         let mark = board[row][col];
-        if (mark === "-") {
-            const newBoard = Array.from(board);
-            newBoard[row][col] = currentPlayer;
-            setBoard([...newBoard]);
-            if (checkWinner(board)) {
-                console.log(`Winner is: ${currentPlayer}`);
-            } else if (checkDraw(board)) {
-                console.log("Draw");
-            } else {
-                setCurrentPlayer((current) => (current === "X" ? "O" : "X"));
-            }
+        if (mark === PIECE.EMPTY) {
+            setCheckingMove(true);
+            setBoard((board) =>
+                board.map((boardRow: PIECE[], i: number) =>
+                    i === row
+                        ? boardRow.map((boardCol: PIECE, j: number) =>
+                              j === col ? currentPlayer : boardCol
+                          )
+                        : boardRow
+                )
+            );
         }
     };
 
-    if (gameType === "AI" && !gameOver) {
-        if (checkDraw(board) || checkWinner(board)) {
-            console.log("setting game over true");
+    useEffect(() => {
+        const isWinner = checkWinner(board);
+        const isDraw = checkDraw(board);
+
+        if (isWinner || isDraw) {
+            if (isWinner) {
+                console.log(`Winner is: ${isWinner}`);
+            } else if (isDraw) {
+                console.log("Draw");
+            }
             setGameOver(true);
-        } else if (currentPlayer === aiPiece && !gameOver) {
-            const { row, col } = easyAi(board);
-            handlePlacePiece(row, col);
+        } else {
+            setCurrentPlayer((current) => (current === PIECE.X ? PIECE.O : PIECE.X));
+            setCheckingMove(false);
         }
-    }
+    }, [board]);
+
+    useEffect(() => {
+        if (!checkingMove && gameType === "AI" && !gameOver && currentPlayer === aiPiece) {
+            if (difficulty === DIFFICULTY.EASY) {
+                const { row, col } = easyAi(board);
+                handlePlacePiece(row, col);
+            } else if (difficulty === DIFFICULTY.HARD) {
+                const { row, col } = hardAi(board, aiPiece);
+                handlePlacePiece(row, col);
+            } else {
+                const { row, col } = easyAi(board);
+                handlePlacePiece(row, col);
+            }
+        }
+    }, [checkingMove, currentPlayer, aiPiece, gameType, gameOver, board]);
 
     return (
         <div className="text-center">
@@ -60,7 +81,7 @@ const index = ({ gameType, selectedPiece, startingPlayer }: props) => {
 
             {board.map((row, rowId) => (
                 <div className="flex justify-center" key={rowId}>
-                    {row.map((sq, colId) => (
+                    {row.map((sq: PIECE, colId: number) => (
                         <Square
                             key={colId}
                             row={rowId}

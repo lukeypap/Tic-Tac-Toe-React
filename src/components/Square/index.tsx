@@ -14,7 +14,15 @@ const index = ({ row, col, mark, handlePlacePiece }: props) => {
             onClick={() => handlePlacePiece(row, col)}
         >
             {mark !== "-" ? (
-                <p className={`${mark === "X" ? "text-[#31C4BE]" : "text-yellow-300"}`}>{mark}</p>
+                <p
+                    className={`${
+                        mark === "X"
+                            ? "bg-gradient-to-r from-violet-500 to-fuchsia-500"
+                            : "bg-gradient-to-r from-sky-500 to-indigo-500"
+                    } bg-clip-text text-transparent`}
+                >
+                    {mark}
+                </p>
             ) : (
                 ""
             )}
