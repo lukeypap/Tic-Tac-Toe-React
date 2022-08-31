@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Board from "../Board";
 import { DIFFICULTY } from "../Board/boardLogic";
 import DifficultyScreen from "../DifficultyScreen";
@@ -17,11 +17,36 @@ const index = () => {
     const [gameStarted, setGameStarted] = useState(false);
     const [difficulty, setDifficulty] = useState<DIFFICULTY | null>(null);
     const [endScreenOpen, setEndScreenOpen] = useState({ open: false, endState: "" });
+    const [exitGame, setExitGame] = useState(false);
+    const [playAgain, setPlayAgain] = useState(false);
+    const [winLoss, setWinLoss] = useState({ xWin: 0, xLoss: 0, oWin: 0, oLoss: 0, draw: 0 });
+
+    useEffect(() => {
+        setGameStarted(false);
+        setSelectedPiece(PIECE.EMPTY);
+        setDifficulty(null);
+        setEndScreenOpen({ open: false, endState: "" });
+        setWinLoss({ xWin: 0, xLoss: 0, oWin: 0, oLoss: 0, draw: 0 });
+        setExitGame(false);
+    }, [exitGame]);
+
+    useEffect(() => {
+        setEndScreenOpen({ ...endScreenOpen, open: false });
+        setPlayAgain(false);
+    }, [playAgain]);
 
     return (
         <>
-            {endScreenOpen.open ? <Modal endScreenOpen={endScreenOpen} /> : ""}
-            <div className="sm:w-screen lg:w-[30vw] md:w-[50vw]">
+            {endScreenOpen.open ? (
+                <Modal
+                    endScreenOpen={endScreenOpen}
+                    setExitGame={setExitGame}
+                    setPlayAgain={setPlayAgain}
+                />
+            ) : (
+                ""
+            )}
+            <div className="sm:w-screen lg:w-[530px] md:w-[50vw] flex flex-col h-screen justify-center">
                 {!gameStarted ? (
                     <>
                         <Header />
@@ -91,6 +116,10 @@ const index = () => {
                         startingPlayer={PIECE.X}
                         difficulty={difficulty}
                         setEndScreenOpen={setEndScreenOpen}
+                        exitGame={exitGame}
+                        playAgain={playAgain}
+                        winLoss={winLoss}
+                        setWinLoss={setWinLoss}
                     />
                 )}
             </div>

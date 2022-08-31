@@ -4,7 +4,7 @@ import { hardAi } from "../../ai/hard";
 import Square from "../Square";
 import { checkDraw, checkWinner, DIFFICULTY, PIECE } from "./boardLogic";
 import Menu from "../Menu";
-import Modal from "../Modal";
+import Stats from "../Stats";
 
 interface props {
     gameType: "AI" | "HUMAN";
@@ -12,6 +12,10 @@ interface props {
     startingPlayer: PIECE;
     difficulty: DIFFICULTY | null;
     setEndScreenOpen: any;
+    exitGame: boolean;
+    playAgain: boolean;
+    winLoss: { xWin: number; xLoss: number; oWin: number; oLoss: number; draw: number };
+    setWinLoss: any;
 }
 
 const index = ({
@@ -20,6 +24,10 @@ const index = ({
     startingPlayer,
     difficulty,
     setEndScreenOpen,
+    exitGame,
+    playAgain,
+    winLoss,
+    setWinLoss,
 }: props) => {
     const [board, setBoard] = useState(Array(3).fill(Array(3).fill(PIECE.EMPTY)));
     const [currentPlayer, setCurrentPlayer] = useState(startingPlayer);
@@ -46,13 +54,13 @@ const index = ({
     };
 
     useEffect(() => {
-        if (resetGame) {
+        if (resetGame || playAgain) {
             setBoard(Array(3).fill(Array(3).fill(PIECE.EMPTY)));
             setCurrentPlayer(startingPlayer);
             setGameOver(false);
             setResetGame(false);
         }
-    }, [resetGame]);
+    }, [resetGame, exitGame, playAgain]);
 
     useEffect(() => {
         const isWinner = checkWinner(board);
@@ -61,8 +69,14 @@ const index = ({
         if (isWinner || isDraw) {
             if (isWinner) {
                 console.log(`Winner is: ${isWinner}`);
+                if (isWinner === PIECE.X) {
+                    setWinLoss({ ...winLoss, xWin: winLoss.xWin + 1, oLoss: winLoss.oLoss + 1 });
+                } else {
+                    setWinLoss({ ...winLoss, xLoss: winLoss.xLoss + 1, oWin: winLoss.oWin + 1 });
+                }
             } else if (isDraw) {
                 console.log("Draw");
+                setWinLoss({ ...winLoss, draw: winLoss.draw + 1 });
             }
             setGameOver(true);
             setEndScreenOpen({ open: true, endState: isWinner ? isWinner : "Draw" });
@@ -113,7 +127,7 @@ const index = ({
                 </div>
             ))}
             <div>
-                <h1>STATS</h1>
+                <Stats winLoss={winLoss} />
             </div>
         </div>
     );

@@ -107,12 +107,12 @@ function checkForWin(board: PIECE[][], aiPiece: PIECE) {
         }
         //diag 2
         if (
-            board[count][count + 2] === aiPiece &&
+            board[count][count + 2] === PIECE.EMPTY &&
             board[count + 1][count + 1] === aiPiece &&
-            board[count + 2][count] === PIECE.EMPTY
+            board[count + 2][count] === aiPiece
         ) {
-            row = count + 2;
-            col = count;
+            row = count;
+            col = count + 2;
         }
         if (
             board[count][count + 2] === aiPiece &&
@@ -127,8 +127,8 @@ function checkForWin(board: PIECE[][], aiPiece: PIECE) {
             board[count + 1][count + 1] === aiPiece &&
             board[count + 2][count] === PIECE.EMPTY
         ) {
-            row = count;
-            col = count + 2;
+            row = count + 2;
+            col = count;
         }
     }
     return { row: row, col: col };
