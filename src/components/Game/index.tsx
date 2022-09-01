@@ -46,7 +46,7 @@ const index = () => {
             ) : (
                 ""
             )}
-            <div className="sm:w-screen lg:w-[530px] md:w-[50vw] flex flex-col h-screen justify-center">
+            <div className=" lg:w-[530px] md:w-[50vw] flex flex-col h-screen justify-center">
                 {!gameStarted ? (
                     <>
                         <Header />

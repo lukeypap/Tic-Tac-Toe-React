@@ -5,6 +5,7 @@ import Square from "../Square";
 import { checkDraw, checkWinner, DIFFICULTY, PIECE } from "./boardLogic";
 import Menu from "../Menu";
 import Stats from "../Stats";
+import { minimaxAi } from "../../ai/minimax";
 
 interface props {
     gameType: "AI" | "HUMAN";
@@ -35,6 +36,7 @@ const index = ({
     const [gameOver, setGameOver] = useState(false);
     const [checkingMove, setCheckingMove] = useState(true);
     const [resetGame, setResetGame] = useState(false);
+    const [endStates, setEndStates] = useState(0);
 
     const handlePlacePiece = (row: number, col: number) => {
         let mark = board[row][col];
@@ -97,7 +99,8 @@ const index = ({
                 const { row, col } = hardAi(board, aiPiece);
                 handlePlacePiece(row, col);
             } else {
-                const { row, col } = easyAi(board);
+                const { row, col, endStates } = minimaxAi(board, aiPiece);
+                setEndStates(endStates);
                 handlePlacePiece(row, col);
             }
         }
@@ -127,7 +130,7 @@ const index = ({
                 </div>
             ))}
             <div>
-                <Stats winLoss={winLoss} />
+                <Stats winLoss={winLoss} endStates={endStates} difficulty={difficulty} />
             </div>
         </div>
     );
