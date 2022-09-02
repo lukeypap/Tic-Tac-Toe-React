@@ -4,6 +4,7 @@ import { DIFFICULTY } from "../Board/boardLogic";
 import DifficultyScreen from "../DifficultyScreen";
 import Header from "../Header";
 import Modal from "../Modal";
+import Footer from "../Footer";
 
 enum PIECE {
     X = "X",
@@ -46,7 +47,7 @@ const index = () => {
             ) : (
                 ""
             )}
-            <div className=" lg:w-[530px] md:w-[50vw] flex flex-col h-screen justify-center">
+            <div className="lg:w-[530px] md:w-[50vw] flex flex-col h-screen justify-center">
                 {!gameStarted ? (
                     <>
                         <Header />
@@ -122,6 +123,7 @@ const index = () => {
                         setWinLoss={setWinLoss}
                     />
                 )}
+                {/* <Footer /> */}
             </div>
         </>
     );
